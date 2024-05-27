@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Demo from "./components/Demo";
+import Button from "./UI/Button";
+import { useCallback, useState, useMemo } from "react";
 
 function App() {
+  const [listTitle, setListTitle] = useState("MY LIST");
+  const [ascending, setAscending] = useState(true);
+
+  const changeTitle = useCallback(() => {
+    setListTitle("OUR LIST");
+  }, []);
+
+  const changeprocess = useCallback(() => {
+    setAscending((prevAscending) => !prevAscending);
+  }, []);
+
+  const sortedListItems = useMemo(() => {
+    return ascending
+      ? [1, 3, 9, 7, 5].sort((a, b) => a - b)
+      : [1, 3, 9, 7, 5].sort((a, b) => b - a);
+  }, [ascending]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Demo title={listTitle} items={sortedListItems}></Demo>
+      <Button onClick={changeTitle}>Change Title</Button>
+      <Button onClick={changeprocess}>
+        {ascending ? "Descending" : "Ascending"}
+      </Button>
     </div>
   );
 }
